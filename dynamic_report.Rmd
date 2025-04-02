@@ -1,0 +1,72 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+
+```
+
+```{css}
+
+```
+
+## Looking at workplace uniform preferences across shift durations 
+
+This survey looked at workplace uniform preferences and whether or not the duration of an individuals shift is likely to influence what they prefer to wear to work 
+
+The 'uniform' of the workplace in question is more of a restriction to specific articles of clothing and their colors (i.e., a black or white t-shirt, blouse, button-up or the company graphic tee, and black dress pants, fitted jeans or medium to long length skirts) - rather than a set outfit. 
+
+```{r}
+library(tidyverse)
+
+logged_data <- data_frame(read.csv("Uniform Responses.csv")) # Loading in the data 
+
+logged_data <- logged_data %>%      # renaming the variables 
+  rename(Style.Top = What.style.of.top.are.you.wearing., 
+         Style.Pant = What.style.of.pants.are.you.wearing.,
+         Shift.Hrs = How.many.hours.is.your.shift.today.)
+
+Mean_Shift <- logged_data$Shift.Hrs %>%  # The average shift length 
+  mean()+ 
+  round(1)
+
+Min_Shift <- logged_data$Shift.Hrs %>% # The shortest shift recorded 
+  min()
+
+Max_Shift <- logged_data$Shift.Hrs %>% # The longest shift recorded
+  max()
+
+paste0("The shortest shift was ",Min_Shift,", while the longest shift recorded was ",Max_Shift,".")
+```
+
+### Looking at top style across shift duration 
+```{r fig.width=8, fig.height=4}
+logged_data %>%   # Looking at how the styles of tops worn change across shift duration
+  ggplot()+ 
+  geom_bar(aes(x = Shift.Hrs, 
+               fill = Style.Top)) +
+  labs(title = "Style of Top Worn Across Shift Lengths", 
+       x = "Shift Length (hrs)", 
+       y = "Tops Worn") + 
+  theme_linedraw() 
+```
+
+When looking at this bar chart we can see that t-shirts and graphic tees are the two most popular options. Along with this, these two styles of tops where the only to be worn during shifts that were 7 hours or shorter, and that blouses and button-ups were exclusively seen in shifts which were over 8 hours. This is possible due to fact the causal or part-time workers are more likely to wear a relaxed style of shirt, whilst full-time workers which include managers and higher up are more likely to opt for a style of shirt which is more formal. 
+
+
+### Looking at pant style across shift duration 
+```{r fig.width=8, fig.height=4}
+logged_data %>%   # Looking at how the styles of pants worn change across shift duration
+  ggplot()+ 
+  geom_bar(aes(x = Shift.Hrs, 
+               fill = Style.Pant)) +
+  labs(title = "Style of Pants Worn Across Shift Lengths", 
+       x = "Shift Length (hrs)", 
+       y = "Pant Style") + 
+  theme_linedraw()
+```
+
+When considering pant preferences we can see that jeans the most popular, and skirts are the least. Unlike the shirts there is not a super clear distinction in preference across shift hours. This is possibly because a nice black pair of jeans are able to be dressed up to be more formal and can also be more casual. 
+
