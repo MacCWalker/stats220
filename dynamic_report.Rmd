@@ -21,7 +21,7 @@ The 'uniform' of the workplace in question is more of a restriction to specific 
 ```{r}
 library(tidyverse)
 
-logged_data <- data_frame(read.csv("Uniform Responses.csv")) # Loading in the data 
+logged_data <- read.csv("Uniform Responses.csv") # Loading in the data 
 
 logged_data <- logged_data %>%      # renaming the variables 
   rename(Style.Top = What.style.of.top.are.you.wearing., 
